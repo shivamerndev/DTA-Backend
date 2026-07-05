@@ -108,11 +108,9 @@ class AttendanceService {
 
 
   async getTeamLogs(managerId, filters = {}) {
-    // Find users who have this manager
+
     const users = await MongoUserRepository.findAllUsers();
-    const teamUserIds = users
-      .filter((u) => u.manager && u.manager._id.toString() === managerId.toString())
-      .map((u) => u._id);
+    const teamUserIds = users.filter((u) => u.manager && u.manager._id.toString() === managerId.toString()).map((u) => u._id);
 
     const query = { employee: { $in: teamUserIds } };
     this.applyDateFilters(query, filters);
