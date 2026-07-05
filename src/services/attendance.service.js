@@ -3,13 +3,16 @@ import MongoUserRepository from "../repository/mongo.user.js";
 import { AppError } from "../utils/error.utils.js";
 import { saveBase64Image, getHaversineDistance } from "../utils/file.utils.js";
 
+
 class AttendanceService {
+
   getLocalDateString(dateObj = new Date()) {
     const year = dateObj.getFullYear();
     const month = String(dateObj.getMonth() + 1).padStart(2, "0");
     const day = String(dateObj.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   }
+
 
   async punchIn(userId, { selfie, location }) {
     const todayStr = this.getLocalDateString();
@@ -58,6 +61,7 @@ class AttendanceService {
     return attendance;
   }
 
+
   async punchOut(userId) {
     const todayStr = this.getLocalDateString();
 
@@ -69,7 +73,6 @@ class AttendanceService {
     if (attendance.punchOut) {
       throw new AppError(400, "You have already punched out today.");
     }
-
     const punchOutTime = new Date();
     const punchInTime = new Date(attendance.punchIn);
     const diffMs = punchOutTime - punchInTime;
@@ -83,6 +86,7 @@ class AttendanceService {
     return updated;
   }
 
+
   async verifyAttendance(attendanceId, { status, remarks }) {
     const attendance = await MongoAttendanceRepository.findAttendanceById(attendanceId);
     if (!attendance) {
@@ -95,11 +99,13 @@ class AttendanceService {
     });
   }
 
+
   async getPersonalLogs(userId, filters = {}) {
     const query = { employee: userId };
     this.applyDateFilters(query, filters);
     return await MongoAttendanceRepository.findAttendance(query);
   }
+
 
   async getTeamLogs(managerId, filters = {}) {
     // Find users who have this manager
@@ -113,6 +119,7 @@ class AttendanceService {
     return await MongoAttendanceRepository.findAttendance(query);
   }
 
+
   async getAllLogs(filters = {}) {
     const query = {};
     if (filters.employeeId) {
@@ -121,6 +128,7 @@ class AttendanceService {
     this.applyDateFilters(query, filters);
     return await MongoAttendanceRepository.findAttendance(query);
   }
+
 
   applyDateFilters(query, filters) {
     if (filters.startDate || filters.endDate) {

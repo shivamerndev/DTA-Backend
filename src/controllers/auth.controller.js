@@ -29,21 +29,13 @@ class AuthController {
         res.success(200, "User Fetched Successfully", user);
     });
 
-    updateUser = asyncHandler(async (req, res) => {
-        const userId = req.user.id || req.user._id;
-        const updates = req.body;
-        let user = await authService.updateUser(userId, updates);
-        res.success(200, "Updated Successfully", user);
-    });
 
     logout = asyncHandler(async (req, res) => {
         const userId = req.user.id || req.user._id;
-        const refresh_token = req.cookies.refresh_token;
 
-        await authService.logout(userId, refresh_token);
+        await authService.logout(userId);
 
         res.clearCookie("token", this.cookieOptions);
-        res.clearCookie("refresh_token", this.cookieOptions);
 
         res.success(200, "Logged Out Successfully.");
     });

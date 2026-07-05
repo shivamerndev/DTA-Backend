@@ -46,8 +46,8 @@ class AuthService {
         return user;
     }
 
-    async logout(userId, refreshToken) {
-        // No-op or clear session state if required.
+    async logout(userId) {
+
         return true;
     }
 

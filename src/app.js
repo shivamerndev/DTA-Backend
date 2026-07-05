@@ -6,7 +6,9 @@ import helmet from "helmet";
 import compression from "compression";
 import path from "path";
 import { fileURLToPath } from "url";
-import { CLIENT_URL } from "./config/env.config.js";
+import { CLIENT_URL, NODE_ENV } from "./config/env.config.js";
+import logger, { loggerStream } from "./utils/logger.js";
+
 
 import authRouter from "./routes/auth.route.js";
 import attendanceRouter from "./routes/attendance.route.js";
@@ -41,7 +43,11 @@ app.use(
 );
 
 // Logger
-app.use(morgan("dev"));
+if (NODE_ENV === "development") {
+  app.use(morgan("dev", { stream: loggerStream }));
+} else {
+  app.use(morgan("combined", { stream: loggerStream }));
+}
 
 // Body Parsers
 app.use(express.json({ limit: "10mb" })); // Support larger base64 images
