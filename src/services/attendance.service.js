@@ -2,7 +2,7 @@ import MongoAttendanceRepository from "../repository/mongo.attendance.js";
 import MongoUserRepository from "../repository/mongo.user.js";
 import { AppError } from "../utils/error.utils.js";
 import { saveBase64Image, getHaversineDistance } from "../utils/file.utils.js";
-
+import { GEOFENCING_LAT, GEOFENCING_LON, GEOFENCING_RADIUS } from "../config/env.config.js";
 
 class AttendanceService {
 
@@ -17,16 +17,16 @@ class AttendanceService {
   async punchIn(userId, { selfie, location }) {
     const todayStr = this.getLocalDateString();
 
-    // Check if already punched in today
+
     const existing = await MongoAttendanceRepository.findAttendanceByEmployeeAndDate(userId, todayStr);
     if (existing) {
       throw new AppError(400, "You have already punched in today.");
     }
 
     // Geofencing check (Optional based on environment config)
-    const gfLat = process.env.GEOFENCING_LAT;
-    const gfLon = process.env.GEOFENCING_LON;
-    const gfRadius = process.env.GEOFENCING_RADIUS ? parseFloat(process.env.GEOFENCING_RADIUS) : 500;
+    const gfLat = GEOFENCING_LAT;
+    const gfLon = GEOFENCING_LON;
+    const gfRadius = GEOFENCING_RADIUS ? parseFloat(GEOFENCING_RADIUS) : 300;
 
     if (gfLat && gfLon) {
       const distance = getHaversineDistance(
