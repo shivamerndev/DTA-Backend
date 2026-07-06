@@ -52,7 +52,7 @@ The backend follows a **layered, class-based architecture** combined with the **
 - **Services (`src/services/`)**: Classes encapsulating the core business logic (e.g., calculating working hours, validating distance rules, validating request payload logic).
 - **Repositories (`src/repository/`)**: Data access layer classes that abstract Mongoose/MongoDB queries. This decouples business logic from direct database operations.
 - **Models (`src/models/`)**: Mongoose schemas defining database collections (`User`, `Attendance`, `OTRequest`).
-- **Middlewares (`src/middlewares/`)**: Contains logic for JWT authentication, role authorization, schema validation (Zod/Express-validator), custom response formatting, and global error handling.
+- **Middlewares (`src/middlewares/`)**: Contains logic for JWT authentication, role authorization, schema validation (Zod), custom response formatting, and global error handling.
 
 ---
 
